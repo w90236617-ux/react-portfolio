@@ -1,0 +1,325 @@
+/* =========================================================
+   FOOTER
+   - Hamesha dark band (dono themes mein text white)
+   - Sab kuch centre mein
+   - Hover mein transform nahi (GSAP magnetic safe)
+   ========================================================= */
+
+.footer {
+  /* Dark tokens lock: light mode mein bhi text white rahega */
+  --text: #eef2f8;
+  --text-muted: #9aa8bc;
+  --surface: rgba(20, 27, 38, 0.55);
+  --surface-hover: rgba(30, 41, 57, 0.72);
+  --border: rgba(160, 182, 212, 0.14);
+  --border-strong: rgba(160, 182, 212, 0.3);
+  --accent: #6f8fb8;
+  --accent-2: #b4c4da;
+  --glow: rgba(111, 143, 184, 0.3);
+  --grad-text: linear-gradient(120deg, #eef2f8 0%, #b4c4da 45%, #6f8fb8 100%);
+  --btn-primary-bg: linear-gradient(135deg, #1b2431 0%, #35507a 55%, #6f8fb8 100%);
+  --btn-primary-text: #f4f7fb;
+
+  position: relative;
+  overflow: clip; /* giant WAHAB text bahar na nikle */
+  isolation: isolate;
+  margin-top: var(--section-y);
+  padding: clamp(4rem, 8vw, 6rem) 0 0;
+  color: var(--text);
+  text-align: center;
+  background:
+    radial-gradient(60% 70% at 50% 0%, rgba(111, 143, 184, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(5, 7, 10, 0) 0%, #080b10 22%, #05070a 100%);
+}
+
+/* Upar patli gradient line */
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: min(70%, 700px);
+  height: 1px;
+  translate: -50% 0; /* transform nahi, translate property */
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(180, 196, 218, 0.55),
+    transparent
+  );
+}
+
+/* Footer ke andar sab text white */
+.footer h2,
+.footer h3,
+.footer h4 {
+  color: var(--text);
+}
+.footer p {
+  color: var(--text-muted);
+}
+.footer a {
+  color: inherit;
+}
+
+/* ---------- Inner wrapper: sab centre ---------- */
+.footer-inner,
+.footer-container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ---------- CTA ---------- */
+.footer-cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 760px;
+  margin-inline: auto;
+  padding-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+.footer-cta h2,
+.footer-title {
+  font-size: clamp(2rem, 5.5vw, 4rem);
+  margin: 0;
+}
+.footer-cta p,
+.footer-sub {
+  max-width: 52ch;
+  margin: 0 auto;
+}
+
+.footer-cta .btn-wrap,
+.footer-btns {
+  justify-content: center;
+}
+
+.footer-btn {
+  /* agar footer ka button .btn class ke bina hai */
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 10px;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  color: var(--btn-primary-text);
+  background: var(--btn-primary-bg);
+  border: 1px solid rgba(180, 196, 218, 0.25);
+  box-shadow: 0 12px 40px -12px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition:
+    box-shadow 0.35s var(--ease),
+    filter 0.35s var(--ease);
+}
+.footer-btn:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 16px 48px -10px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- Columns (centre-aligned grid) ---------- */
+.footer-grid,
+.footer-columns {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(1.75rem, 4vw, 3rem);
+  justify-items: center;
+  padding: clamp(2rem, 5vw, 3rem) 0;
+  border-top: 1px solid var(--border);
+}
+
+.footer-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: center;
+}
+.footer-col h3,
+.footer-col h4 {
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+  margin: 0 0 0.25rem;
+}
+
+/* Brand block */
+.footer-brand {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* Links list */
+.footer-links,
+.footer ul {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.55rem;
+}
+.footer-links a,
+.footer-col a {
+  position: relative;
+  display: inline-block;
+  color: var(--text-muted);
+  transition: color 0.3s var(--ease);
+}
+.footer-links a::after,
+.footer-col a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  transform: scaleX(0);
+  transition: transform 0.4s var(--ease);
+}
+.footer-links a:hover,
+.footer-col a:hover {
+  color: var(--text);
+}
+.footer-links a:hover::after,
+.footer-col a:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Social icons ---------- */
+.footer-social {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.footer-social-link {
+  display: inline-grid;
+  place-items: center;
+  min-width: 42px;
+  height: 42px;
+  padding: 0 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+.footer-social-link:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--glow);
+}
+
+/* ---------- Giant "WAHAB" background text ----------
+   transform use nahi kiya (GSAP scrub isko chalata hai).
+   Centre width:100% + text-align se, translate se nahi. */
+.footer-bg-text,
+.footer-giant {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.18em;
+  z-index: 0;
+  width: 100%;
+  text-align: center;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(5rem, 24vw, 21rem);
+  line-height: 0.8;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  user-select: none;
+  pointer-events: none;
+  color: transparent;
+  background: linear-gradient(
+    180deg,
+    rgba(180, 196, 218, 0.16) 0%,
+    rgba(111, 143, 184, 0.04) 70%,
+    transparent 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* ---------- Bottom bar ---------- */
+.footer-bottom {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 1.5rem var(--gutter) 2rem;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+.footer-bottom p {
+  margin: 0;
+  font-size: inherit;
+}
+
+/* ---------- Back to top ---------- */
+.to-top {
+  position: fixed;
+  right: clamp(1rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 2rem);
+  z-index: 90;
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  color: #eef2f8;
+  background: rgba(14, 19, 27, 0.8);
+  border: 1px solid rgba(160, 182, 212, 0.3);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.7);
+  transition:
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease),
+    background 0.35s var(--ease);
+}
+.to-top:hover {
+  border-color: #6f8fb8;
+  background: rgba(30, 41, 57, 0.9);
+  box-shadow: 0 0 0 4px rgba(111, 143, 184, 0.25);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  .footer-grid,
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+  .footer-bg-text,
+  .footer-giant {
+    font-size: clamp(4rem, 26vw, 8rem);
+  }
+}

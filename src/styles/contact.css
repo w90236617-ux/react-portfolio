@@ -1,0 +1,560 @@
+/* =========================================================
+   contact.css  —  Contact.jsx
+   GSAP elements par transform/opacity NAHI:
+   .contact-orb, .contact-orb-wrap, .info-item, .social-item,
+   .contact-form-card, .form-field, .form-submit-wrap, .form-status,
+   .contact-subtitle, title chars
+   AOS element: .availability (element par transition nahi)
+   ========================================================= */
+
+/* ---------- 1. Section ---------- */
+.contact {
+  position: relative;
+  padding-block: calc(var(--header-h) + clamp(40px, 6vw, 80px)) var(--section-y);
+  padding-inline: max(
+    var(--gutter),
+    calc((100% - var(--container)) / 2 + var(--gutter))
+  );
+  overflow-x: clip;
+}
+
+.contact-header,
+.contact-layout {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- 2. Background orb (GSAP float + parallax) ---------- */
+.contact-orb-wrap {
+  position: absolute;
+  top: 6%;
+  right: -8%;
+  width: min(560px, 70vw);
+  aspect-ratio: 1;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contact-orb {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    color-mix(in srgb, var(--accent) 38%, transparent),
+    transparent 70%
+  );
+}
+
+.contact-orb::after {
+  content: "";
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  opacity: 0.7;
+}
+
+[data-theme="light"] .contact-orb {
+  background: radial-gradient(
+    circle at 35% 35%,
+    color-mix(in srgb, var(--accent) 26%, transparent),
+    transparent 70%
+  );
+}
+
+/* ---------- 3. Header ---------- */
+.contact-header {
+  max-width: 760px;
+  margin: 0 auto clamp(36px, 5vw, 64px);
+  text-align: center;
+}
+
+.contact-header::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 28px auto 0;
+  border-radius: var(--radius-pill);
+  background: var(--grad-primary);
+}
+
+.contact-title {
+  margin: 0 0 18px;
+  font-family: var(--font-heading);
+  font-size: clamp(2.4rem, 6vw, 4.4rem);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* SplitText fix: gradient chars par, .accent par nahi */
+.contact-title .accent {
+  background: none;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent-2);
+}
+
+.contact-title .accent .split-inner {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.contact-subtitle {
+  max-width: 56ch;
+  margin: 0 auto;
+  font-size: clamp(1rem, 1.4vw, 1.15rem);
+  line-height: 1.7;
+  color: var(--text-muted);
+}
+
+/* ---------- 4. Layout ---------- */
+.contact-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: start;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+.info-item {
+  display: block;
+  min-width: 0;
+}
+
+/* ---------- 5. Info cards (TiltCard) ---------- */
+.contact-info .info-card {
+  display: block;
+  padding: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+.contact-info .info-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card), var(--shadow-glow);
+}
+
+.info-link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  color: inherit;
+  text-decoration: none;
+  transform-style: preserve-3d;
+  border-radius: inherit;
+}
+
+.info-icon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  box-shadow: var(--shadow-glow);
+}
+
+.info-text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+.info-text small {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.info-text strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow-wrap: anywhere;
+}
+
+/* sirf link wale card par arrow */
+a.info-link {
+  cursor: pointer;
+}
+
+a.info-link::after {
+  content: "\2197";
+  align-self: center;
+  margin-left: auto;
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  opacity: 0;
+  translate: -6px 6px;
+  transform: translateZ(18px);
+  transition: opacity 0.3s ease, translate 0.35s var(--ease), color 0.3s ease;
+}
+
+a.info-link:hover::after,
+a.info-link:focus-visible::after {
+  opacity: 1;
+  translate: 0 0;
+  color: var(--accent);
+}
+
+.info-link:focus-visible,
+.social-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------- 6. Socials ---------- */
+.contact-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.social-item {
+  display: block;
+}
+
+.social-link {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  transition: background 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.social-link:hover {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: transparent;
+  box-shadow: var(--shadow-glow);
+}
+
+/* ---------- 7. Availability pill (AOS) ---------- */
+.availability {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 12px;
+  padding: 10px 18px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.88rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.availability-dot {
+  position: relative;
+  flex: 0 0 auto;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.availability-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: contact-pulse 2.2s ease-out infinite;
+}
+
+@keyframes contact-pulse {
+  0%   { transform: scale(1);   opacity: 0.55; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+/* ---------- 8. Form card (GSAP: transform/opacity nahi) ---------- */
+.contact-form-card {
+  position: relative;
+  min-width: 0;
+  padding: clamp(22px, 3.5vw, 40px);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: var(--grad-card);
+  box-shadow: var(--shadow-card);
+  transition: border-color 0.35s var(--ease), box-shadow 0.35s var(--ease);
+}
+
+/* upar patli highlight line */
+.contact-form-card::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 8%;
+  right: 8%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* corner glow */
+.contact-form-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 100% 0%,
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    transparent 55%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.contact-form-card:focus-within {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card),
+    0 0 0 4px color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.contact-form {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.form-field label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  transition: color 0.3s ease;
+}
+
+.form-field:focus-within label {
+  color: var(--accent);
+}
+
+/* ---------- 9. Inputs ---------- */
+.form-field input,
+.form-field textarea {
+  display: block;
+  width: 100%;
+  padding: 14px 16px;
+  font: inherit;
+  font-size: 1rem; /* 16px: iOS zoom nahi karega */
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-field textarea {
+  min-height: 150px;
+  line-height: 1.6;
+  resize: vertical;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+  color: color-mix(in srgb, var(--text-muted) 70%, transparent);
+}
+
+.form-field input:hover,
+.form-field textarea:hover {
+  border-color: var(--border-strong);
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* galat input (user touch karne ke baad) */
+.form-field input:user-invalid,
+.form-field textarea:user-invalid {
+  border-color: #c98a8a;
+}
+
+/* Chrome autofill ka safed/peela background hatao */
+.form-field input:-webkit-autofill,
+.form-field input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  caret-color: var(--text);
+  transition: background-color 600000s 0s;
+}
+
+/* honeypot: off-screen (display:none nahi) */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ---------- 10. Submit ---------- */
+.form-submit-wrap {
+  display: flex;
+  align-items: center;
+  padding-top: 4px;
+}
+
+.form-submit {
+  min-width: 190px;
+}
+
+.form-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+/* ---------- 11. Status message (GSAP pop-in) ---------- */
+.form-status {
+  --status: var(--accent);
+  --status-ink: #05070a;
+  position: relative;
+  margin: 18px 0 0;
+  padding: 14px 16px 14px 52px;
+  border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--status) 40%, transparent);
+  background: color-mix(in srgb, var(--status) 12%, transparent);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+}
+
+.form-status::before {
+  content: "\2713";
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  translate: 0 -50%;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--status);
+  color: var(--status-ink);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.form-status.success { --status: #7fb7a4; }
+.form-status.error   { --status: #c98a8a; }
+.form-status.error::before { content: "!"; }
+
+[data-theme="light"] .form-status { --status-ink: #fff; }
+[data-theme="light"] .form-status.success { --status: #3f8a78; }
+[data-theme="light"] .form-status.error   { --status: #a65a5a; }
+
+/* ---------- 12. Responsive ---------- */
+@media (max-width: 900px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contact-orb-wrap {
+    top: 2%;
+    right: -25%;
+    width: min(420px, 90vw);
+    opacity: 0.8;
+  }
+}
+
+@media (max-width: 560px) {
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .info-link {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .info-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-submit-wrap,
+  .form-submit-wrap .form-submit {
+    width: 100%;
+  }
+
+  .availability {
+    align-self: stretch;
+    border-radius: var(--radius-sm);
+  }
+}
+
+/* touch devices: arrow hamesha halka sa dikhe */
+@media (hover: none) {
+  a.info-link::after {
+    opacity: 0.6;
+    translate: 0 0;
+  }
+}
+
+/* ---------- 13. Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .availability-dot::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  .contact-info .info-card,
+  .contact-form-card,
+  .social-link,
+  .form-field input,
+  .form-field textarea,
+  a.info-link::after {
+    transition: none;
+  }
+}

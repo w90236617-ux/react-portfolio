@@ -1,0 +1,502 @@
+/* =========================================================
+   ABOUT (About.jsx ke exact classNames)
+   Rules:
+   - .about-image, .skill-item, .skill-tag, .about-info li,
+     .about-text h2/p par CSS transform NAHI (GSAP chalata hai)
+   - .about-box par AOS hai, isliye hover pseudo-element par
+   ========================================================= */
+
+/* ---------- Section: centre width bina wrapper ke ---------- */
+.about {
+  position: relative;
+  padding-block: calc(var(--header-h) + 2rem) var(--section-y);
+  padding-inline: max(
+    var(--gutter),
+    calc((100% - var(--container)) / 2 + var(--gutter))
+  );
+  overflow-x: clip; /* slide animations se horizontal scroll na aaye */
+}
+
+/* ---------- Title ---------- */
+.about-title {
+  margin: 0 0 clamp(2.5rem, 6vw, 4rem);
+  text-align: center;
+  font-size: clamp(2.6rem, 6.2vw, 4.4rem);
+  line-height: 1.12; /* split-mask overflow hidden hai */
+  letter-spacing: -0.035em;
+}
+.about-title::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin: 0.5rem auto 0;
+  border-radius: 3px;
+  background: var(--grad-accent);
+}
+
+/* .accent + SplitText fix (Home jaisa): gradient har char par */
+.about-title .accent {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+.about-title .accent .split-inner {
+  background: linear-gradient(
+    165deg,
+    var(--accent-2) 0%,
+    var(--accent) 55%,
+    var(--accent-deep) 125%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* =========================================================
+   INTRO: photo left, text right
+   ========================================================= */
+.about-intro {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5rem);
+  margin-bottom: clamp(4rem, 9vw, 7rem);
+}
+
+/* Photo ke peeche soft steel-blue glow
+   (.about-intro par hai, .about-image par nahi, kyunke uska clipPath animate hota hai) */
+.about-intro::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  left: -8%;
+  width: min(60vw, 520px);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+  border-radius: 50%;
+  background: var(--grad-glow);
+  filter: blur(50px);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ---------- Photo ---------- */
+.about-image {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  justify-self: center;
+}
+
+/* TiltCard root. Photo circular (kaale corners ke saath) hai,
+   isliye circle crop. Normal rectangle photo ho to:
+   border-radius: var(--radius); aspect-ratio: 4 / 5; */
+.about-image-card {
+  display: block;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden; /* scroll zoom card ke andar rahe */
+  isolation: isolate;
+  background: var(--bg-elev);
+  box-shadow:
+    0 40px 80px -30px rgba(0, 0, 0, 0.75),
+    0 0 0 1px var(--border-strong),
+    var(--shadow-glow);
+}
+
+.about-image-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Cool blue-gray lighting overlay */
+.about-image-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  background: linear-gradient(
+    160deg,
+    rgba(180, 196, 218, 0.14) 0%,
+    transparent 40%,
+    rgba(5, 7, 10, 0.26) 100%
+  );
+  pointer-events: none;
+}
+
+/* Gradient ring (mask se sirf kinara dikhta hai), halka ghoomta hai */
+.about-image-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  border-radius: 50%;
+  background: var(--grad-ring);
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 6px),
+    #000 calc(100% - 5px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 6px),
+    #000 calc(100% - 5px)
+  );
+  pointer-events: none;
+  animation: about-ring-spin 20s linear infinite;
+}
+@keyframes about-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Text ---------- */
+.about-text {
+  min-width: 0;
+}
+
+.about-text h2 {
+  margin: 0 0 0.8em;
+  font-size: clamp(1.6rem, 3vw, 2.3rem);
+  line-height: 1.2;
+}
+.about-text h2::after {
+  content: "";
+  display: block;
+  width: 48px;
+  height: 3px;
+  margin-top: 0.7rem;
+  border-radius: 3px;
+  background: var(--grad-accent);
+}
+
+.about-text p {
+  max-width: 62ch;
+  font-size: clamp(1rem, 1.3vw, 1.06rem);
+  line-height: 1.85;
+}
+
+/* Info cards: 2 column */
+.about-info {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+.about-info li {
+  padding: 0.85rem 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+  transition:
+    border-color 0.35s var(--ease),
+    background 0.35s var(--ease);
+}
+.about-info li:hover {
+  background: var(--surface-hover);
+  border-color: var(--border-strong);
+}
+.about-info strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* =========================================================
+   SKILLS
+   ========================================================= */
+.about-skills {
+  margin-bottom: clamp(4rem, 9vw, 7rem);
+}
+
+.about-skills > h2 {
+  margin: 0 0 clamp(2rem, 5vw, 3rem);
+  text-align: center;
+}
+.about-skills > h2::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 0.7rem auto 0;
+  border-radius: 3px;
+  background: var(--grad-accent);
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+  counter-reset: skill;
+}
+
+/* GSAP entrance wala wrapper: sirf layout, transform nahi */
+.skill-item {
+  display: flex;
+  min-width: 0;
+  counter-increment: skill;
+}
+
+/* Specificity thori zyada: index.css ka card base override ho.
+   backdrop-filter hatana zaroori hai, warna wo transform-style
+   ko flat kar deta hai aur data-tilt-z ka 3D depth khatam ho jata hai. */
+.skills-grid .skill-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  padding: clamp(1.4rem, 2.6vw, 2rem);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Upar patli highlight line */
+.skills-grid .skill-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Corner glow, hover par barhta hai */
+.skills-grid .skill-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(120% 80% at 0% 0%, var(--glow), transparent 60%);
+  opacity: 0.35;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+.skills-grid .skill-card:hover::after {
+  opacity: 0.8;
+}
+
+.skill-card h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  font-size: 1.2rem;
+}
+/* 01 / 02 / 03 numbering */
+.skill-card h3::before {
+  content: counter(skill, decimal-leading-zero);
+  padding: 0.25rem 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.skill-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+.skill-tag:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+}
+
+/* "Currently Learning" card: dashed tags (abhi seekh raha hoon) */
+.skill-item:nth-child(3) .skill-tag {
+  border-style: dashed;
+  border-color: var(--border-strong);
+}
+
+/* =========================================================
+   EDUCATION + GOAL (AOS)
+   Hover pseudo-element par: AOS ki transition property
+   .about-box par hoti hai, usse nahi chhedna
+   ========================================================= */
+.about-extra {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.about-box {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--grad-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card), var(--inset-hl);
+}
+
+/* Glow (neeche, content ke peeche) */
+.about-box::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(80% 70% at 100% 0%, var(--glow), transparent 65%);
+  opacity: 0.3;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+
+/* Gradient border (hover par reveal) */
+.about-box::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    145deg,
+    var(--accent-2),
+    transparent 45%,
+    var(--accent)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  /* -webkit-mask-composite: xor; */
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+.about-box:hover::before {
+  opacity: 0.7;
+}
+.about-box:hover::after {
+  opacity: 1;
+}
+
+.about-box h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  font-size: clamp(1.3rem, 2.4vw, 1.7rem);
+}
+.about-box h2::before {
+  content: "";
+  flex: none;
+  width: 4px;
+  height: 1.1em;
+  border-radius: 4px;
+  background: var(--grad-accent);
+}
+.about-box h3 {
+  margin: 0 0 0.25rem;
+  font-size: 1.1rem;
+}
+.about-box p:last-child {
+  margin-bottom: 0;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 960px) {
+  .about-intro {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .about-image {
+    max-width: min(72vw, 340px);
+  }
+  .about-intro::before {
+    left: 50%;
+    translate: -50% -50%;
+    top: 22%;
+  }
+
+  .skills-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  /* Teesra card akela ho to poori row le */
+  .skill-item:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-extra {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .about {
+    padding-top: calc(var(--header-h) + 1.25rem);
+  }
+  .about-info {
+    grid-template-columns: 1fr;
+  }
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+  .skill-item:last-child:nth-child(odd) {
+    grid-column: auto;
+  }
+  .about-image-card::after {
+    animation-duration: 28s;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .about-image-card::after {
+    animation: none;
+  }
+}

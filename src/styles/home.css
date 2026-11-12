@@ -1,0 +1,393 @@
+/* =========================================================
+   HOME (Home.jsx ke exact classNames)
+   Rules:
+   - .home-image / .home-glow / .badge-layer par CSS transform
+     ya opacity animation NAHI (GSAP inhe chalata hai)
+   - Pseudo-elements par animation allowed hai
+   ========================================================= */
+
+/* ---------- Section = grid ---------- */
+.home {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  align-items: center;
+  gap: clamp(2.5rem, 6vw, 5rem);
+  /* Container ke barabar centre width, bina wrapper div ke */
+  padding-block: calc(var(--header-h) + 2rem) clamp(3rem, 6vw, 5rem);
+  padding-inline: max(
+    var(--gutter),
+    calc((100% - var(--container)) / 2 + var(--gutter))
+  );
+  overflow-x: clip; /* badges/glow se horizontal scroll na aaye */
+}
+
+/* ---------- Text side ---------- */
+.home-text {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* "Hello, I'm" pill */
+.home-hello {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  align-self: flex-start;
+  margin: 0 0 1.25rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.78rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.home-hello::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: home-pulse 2.4s ease-out infinite;
+}
+@keyframes home-pulse {
+  0%   { box-shadow: 0 0 0 0 var(--glow); }
+  70%  { box-shadow: 0 0 0 10px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+/* Naam */
+.home-name {
+  margin: 0 0 0.3em;
+  font-size: clamp(2.5rem, 7.2vw, 5.4rem);
+  line-height: 1.08; /* mask overflow hidden hai, thora extra room */
+  letter-spacing: -0.035em;
+}
+
+/* .accent + SplitText fix:
+   parent par background-clip:text chars ke saath toot jata hai,
+   isliye gradient har char (.split-inner) par lagaya hai */
+.home-name .accent {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+.home-name .accent .split-inner {
+  background: linear-gradient(
+    165deg,
+    var(--accent-2) 0%,
+    var(--accent) 55%,
+    var(--accent-deep) 125%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Role */
+.home-role {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0 0 1.25rem;
+  font-size: clamp(1.05rem, 2.3vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--text-muted);
+}
+.home-role::before {
+  content: "";
+  flex: none;
+  width: 40px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--grad-accent);
+}
+
+/* Description */
+.home-desc {
+  max-width: 54ch;
+  margin: 0 0 2rem;
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  line-height: 1.8;
+  color: var(--text-muted);
+}
+
+/* Buttons: 3 alag .btn-wrap ek row mein */
+.home-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+/* ---------- Visual side ---------- */
+.home-visual {
+  position: relative;
+  z-index: 1;
+  justify-self: center;
+  width: min(100%, 440px);
+  aspect-ratio: 1;
+}
+
+/* Orbit: dashed ring + us par ghoomta dot (pseudo, GSAP se alag) */
+.home-visual::before,
+.home-visual::after {
+  content: "";
+  position: absolute;
+  inset: -9%;
+  z-index: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: home-orbit 50s linear infinite;
+}
+.home-visual::before {
+  border: 1px dashed var(--border-strong);
+  opacity: 0.7;
+}
+.home-visual::after {
+  background: radial-gradient(
+    circle at 50% 2%,
+    var(--accent-2) 0 3px,
+    var(--glow) 4px,
+    transparent 10px
+  );
+}
+@keyframes home-orbit {
+  to { transform: rotate(360deg); }
+}
+
+/* Peeche glow (sirf style, animation GSAP ki) */
+.home-glow {
+  position: absolute;
+  inset: -14%;
+  z-index: 0;
+  border-radius: 50%;
+  background: var(--grad-glow);
+  filter: blur(36px);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+/* ---------- Profile photo ---------- */
+.home-image {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden; /* scroll zoom ring ke andar hi rahe */
+  isolation: isolate;
+  background: var(--bg-elev);
+  box-shadow:
+    0 40px 80px -30px rgba(0, 0, 0, 0.8),
+    0 0 0 1px var(--border-strong),
+    var(--shadow-glow);
+}
+
+/* Photo: container se thori bari, taake scroll parallax mein
+   khali jagah na dikhe (aur photo ke black corners chhup jayein) */
+.home-image img {
+  position: absolute;
+  top: -8%;
+  left: 0;
+  width: 100%;
+  height: 116%;
+  max-width: none;
+  object-fit: cover;
+  object-position: center top;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Upar ring (steel-blue conic gradient, halka ghoomta hai).
+   Mask se sirf kinara dikhta hai, andar photo */
+.home-image::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: 50%;
+  background: var(--grad-ring);
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 7px),
+    #000 calc(100% - 6px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 7px),
+    #000 calc(100% - 6px)
+  );
+  pointer-events: none;
+  animation: home-ring-spin 16s linear infinite;
+}
+@keyframes home-ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Photo par cool blue-gray lighting overlay */
+.home-image::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: 50%;
+  background: linear-gradient(
+    160deg,
+    rgba(180, 196, 218, 0.14) 0%,
+    transparent 40%,
+    rgba(5, 7, 10, 0.28) 100%
+  );
+  pointer-events: none;
+}
+
+/* ---------- Floating tech badges ---------- */
+.badge-layer {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.floating-badge {
+  display: inline-flex; /* inline hota to GSAP y kaam nahi karta */
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  color: var(--text);
+  background: var(--grad-card);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-card), var(--inset-hl);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.floating-badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 10px var(--glow);
+}
+
+/* 5 badges ki jagah (HTML, CSS, JavaScript, React, Firebase) */
+.badge-1 { top: 8%;     left: -4%; }
+.badge-2 { top: 20%;    right: -8%; }
+.badge-3 { top: 52%;    left: -14%; }
+.badge-4 { bottom: 14%; right: -6%; }
+.badge-5 { bottom: -3%; left: 22%; }
+
+/* ---------- Tablet / Mobile layout ---------- */
+@media (max-width: 960px) {
+  .home {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    gap: 3rem;
+    text-align: center;
+  }
+
+  /* Pehle photo, phir text */
+  .home-visual {
+    order: -1;
+    width: min(68vw, 320px);
+  }
+
+  .home-text {
+    align-items: center;
+  }
+  .home-hello {
+    align-self: center;
+  }
+  .home-role {
+    justify-content: center;
+  }
+  .home-role::before {
+    display: none;
+  }
+  .home-desc {
+    margin-inline: auto;
+  }
+  .home-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 560px) {
+  .home {
+    gap: 2.5rem;
+    padding-top: calc(var(--header-h) + 1.25rem);
+  }
+
+  .home-visual {
+    width: min(64vw, 250px);
+  }
+
+  .home-image::before {
+    animation-duration: 24s;
+    -webkit-mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 5px),
+      #000 calc(100% - 4px)
+    );
+    mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - 5px),
+      #000 calc(100% - 4px)
+    );
+  }
+
+  /* Orbit mobile par halka */
+  .home-visual::before,
+  .home-visual::after {
+    inset: -7%;
+  }
+
+  .floating-badge {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.68rem;
+  }
+  .badge-1 { top: 4%;     left: -8%; }
+  .badge-2 { top: 18%;    right: -14%; }
+  .badge-3 { top: 54%;    left: -20%; }
+  .badge-4 { bottom: 10%; right: -12%; }
+  .badge-5 { bottom: -6%; left: 18%; }
+
+  /* Buttons full width, neeche neeche */
+  .home-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  .home-buttons .btn-wrap,
+  .home-buttons .btn {
+    width: 100%;
+  }
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .home-hello::before,
+  .home-visual::before,
+  .home-visual::after,
+  .home-image::before {
+    animation: none;
+  }
+}
+

@@ -1,0 +1,547 @@
+/* =========================================================
+   CERTIFICATES (Certificates.jsx ke exact classNames)
+   Rules:
+   - .cert-item par CSS transform/opacity NAHI (GSAP entrance)
+   - .cert-meta > * par CSS transform/opacity NAHI (GSAP stagger)
+   - .cert-image-clip img par transform transition NAHI
+     (GSAP scale chalata hai). Hover zoom "scale" property se
+   - .cert-card par backdrop-filter, overflow, isolation NAHI
+   - .certs-note par AOS hai, isliye transition nahi
+   ========================================================= */
+
+/* ---------- Section ---------- */
+.certs {
+  position: relative;
+  isolation: isolate;
+  padding-block: calc(var(--header-h) + 2rem) var(--section-y);
+  padding-inline: max(
+    var(--gutter),
+    calc((100% - var(--container)) / 2 + var(--gutter))
+  );
+  overflow-x: clip;
+}
+
+.certs::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 50%;
+  width: min(90vw, 760px);
+  aspect-ratio: 1.6;
+  translate: -50% -10%;
+  border-radius: 50%;
+  background: var(--grad-glow);
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* ---------- Header ---------- */
+.certs-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.certs-title {
+  margin: 0 0 0.3em;
+  font-size: clamp(2.6rem, 6.2vw, 4.4rem);
+  line-height: 1.12; /* split-mask overflow hidden hai */
+  letter-spacing: -0.035em;
+}
+.certs-title::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin: 0.5rem auto 0;
+  border-radius: 3px;
+  background: var(--grad-accent);
+}
+
+/* .accent + SplitText fix: gradient har char par */
+.certs-title .accent {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+.certs-title .accent .split-inner {
+  background: linear-gradient(
+    165deg,
+    var(--accent-2) 0%,
+    var(--accent) 55%,
+    var(--accent-deep) 125%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.certs-subtitle {
+  max-width: 52ch;
+  margin: 0.75rem auto 0;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+.certs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+  align-items: stretch;
+  gap: clamp(1.25rem, 2.6vw, 2rem);
+}
+
+/* GSAP entrance wala wrapper: sirf layout */
+.cert-item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+.cert-item:hover {
+  z-index: 2;
+}
+
+/* Sirf ek certificate ho to centre mein, bada aur wide */
+.cert-item:only-child {
+  grid-column: 1 / -1;
+  width: 100%;
+  max-width: 980px;
+  justify-self: center;
+}
+
+/* =========================================================
+   CARD (TiltCard root)
+   ========================================================= */
+/* Specificity thori zyada: index.css ka card base override ho */
+.certs-grid .cert-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  min-width: 0;
+  padding: clamp(0.75rem, 1.6vw, 1rem);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* Upar patli highlight line */
+.cert-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Corner glow, hover par barhta hai */
+.cert-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(110% 70% at 0% 0%, var(--glow), transparent 60%);
+  opacity: 0.25;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+.cert-card:hover::after {
+  opacity: 0.75;
+}
+
+.cert-card > .tilt-glare {
+  z-index: 4;
+}
+
+/* ---------- Image (button) ---------- */
+.cert-image {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: calc(var(--radius) - 6px);
+  background: none;
+  cursor: zoom-in;
+}
+.cert-image:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 4px;
+}
+
+/* GSAP clip-path isi par chalta hai */
+.cert-image-clip {
+  display: block;
+  overflow: hidden; /* zoom clip ke andar rahe */
+  aspect-ratio: 1.4 / 1;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 7px);
+  background: var(--bg-elev);
+}
+
+.cert-image-clip img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+  /* "scale" property, GSAP ke "transform" se alag hai */
+  transition: scale 0.9s var(--ease);
+}
+.cert-image:hover .cert-image-clip img,
+.cert-image:focus-visible .cert-image-clip img {
+  scale: 1.05;
+}
+
+/* Hover par neeche dark fade */
+.cert-image::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(to top, rgba(5, 7, 10, 0.6), transparent 55%);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
+}
+.cert-image:hover::after,
+.cert-image:focus-visible::after {
+  opacity: 1;
+}
+
+.cert-image-hint {
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  bottom: 0.9rem;
+  width: fit-content;
+  margin-inline: auto;
+  padding: 0.5rem 1.05rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f4f7fb; /* overlay hamesha dark, text hamesha white */
+  background: rgba(14, 19, 27, 0.75);
+  border: 1px solid rgba(180, 196, 218, 0.4);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  opacity: 0;
+  translate: 0 10px;
+  transition:
+    opacity 0.45s var(--ease),
+    translate 0.5s var(--ease);
+  pointer-events: none;
+}
+.cert-image:hover .cert-image-hint,
+.cert-image:focus-visible .cert-image-hint {
+  opacity: 1;
+  translate: 0 0;
+}
+
+/* ---------- Meta ---------- */
+.cert-meta {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.25rem 0.5rem 0.5rem;
+  transform-style: preserve-3d; /* title/actions ka depth pass ho */
+}
+.cert-meta > * {
+  margin: 0;
+}
+
+.cert-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-pill);
+}
+.cert-badge::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 10px var(--glow);
+}
+
+.cert-title {
+  font-size: clamp(1.3rem, 2.4vw, 1.75rem);
+  line-height: 1.2;
+}
+
+.cert-issuer {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.cert-desc {
+  font-size: 0.95rem;
+  line-height: 1.75;
+}
+
+.cert-details {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+.cert-details li {
+  padding: 0.7rem 0.9rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.cert-details small {
+  display: block;
+  margin-bottom: 0.1rem;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.cert-details strong {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.cert-id {
+  width: 100%;
+  padding: 0.6rem 0.8rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.76rem;
+  line-height: 1.5;
+  color: var(--text-muted);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
+.cert-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.4rem;
+}
+
+/* ---------- Note (AOS) ---------- */
+.certs-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin: clamp(3rem, 7vw, 5rem) 0 0;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-muted);
+}
+.certs-note::before,
+.certs-note::after {
+  content: "";
+  flex: 1;
+  max-width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-strong));
+}
+.certs-note::after {
+  transform: scaleX(-1);
+}
+
+/* =========================================================
+   LIGHTBOX (document.body mein, .certs ke bahar)
+   Light mode mein bhi dark rahe: tokens lock
+   GSAP opacity/scale chalata hai: CSS transform nahi
+   ========================================================= */
+.lightbox {
+  --text: #eef2f8;
+  --text-muted: #9aa8bc;
+  --border: rgba(160, 182, 212, 0.14);
+  --border-strong: rgba(160, 182, 212, 0.3);
+  --accent: #6f8fb8;
+  --accent-2: #b4c4da;
+  --glow: rgba(111, 143, 184, 0.3);
+
+  position: fixed;
+  inset: 0;
+  z-index: 300; /* header (100) aur mobile menu (99) ke upar */
+  display: grid;
+  place-items: center;
+  padding: clamp(0.75rem, 3vw, 2rem);
+  background:
+    radial-gradient(60% 50% at 50% 0%, rgba(62, 90, 130, 0.3), transparent 70%),
+    rgba(5, 7, 10, 0.86);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  overscroll-behavior: contain;
+}
+
+.lightbox-box {
+  position: relative;
+  width: min(100%, 960px);
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 12px;
+  color: var(--text);
+  background: linear-gradient(145deg, #141b26 0%, #0a0e14 100%);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: 0 40px 100px -30px rgba(0, 0, 0, 0.9), 0 0 60px -20px var(--glow);
+}
+
+.lightbox-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: calc(100dvh - 11rem);
+  object-fit: contain;
+  border-radius: calc(var(--radius) - 6px);
+  background: #0a0e14;
+}
+
+.lightbox-close {
+  position: absolute;
+  z-index: 3;
+  top: 1.25rem;
+  right: 1.25rem;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-size: 0.95rem;
+  line-height: 1;
+  color: #f4f7fb;
+  background: rgba(14, 19, 27, 0.8);
+  border: 1px solid rgba(180, 196, 218, 0.35);
+  border-radius: 50%;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease),
+    rotate 0.5s var(--ease);
+}
+.lightbox-close:hover {
+  background: rgba(30, 41, 57, 0.95);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--glow);
+  rotate: 90deg;
+}
+
+.lightbox-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  padding-bottom: 0.25rem;
+}
+
+/* =========================================================
+   TOUCH: hover nahi hota, hint hamesha dikhe
+   ========================================================= */
+@media (hover: none) {
+  .cert-image-hint {
+    opacity: 1;
+    translate: 0 0;
+  }
+  .cert-image::after {
+    opacity: 0.7;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+/* Sirf ek certificate: wide screen par image left, details right */
+@media (min-width: 860px) {
+  .cert-item:only-child .cert-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    padding: clamp(1rem, 2vw, 1.5rem);
+  }
+}
+
+@media (max-width: 859px) {
+  .cert-item:only-child {
+    max-width: 520px;
+  }
+}
+
+@media (max-width: 639px) {
+  .certs {
+    padding-top: calc(var(--header-h) + 1.25rem);
+  }
+  .certs-grid {
+    max-width: 520px;
+    margin-inline: auto;
+  }
+  .cert-actions {
+    width: 100%;
+    flex-direction: column;
+  }
+  .cert-actions .btn {
+    width: 100%;
+  }
+  .lightbox-box img {
+    max-height: calc(100dvh - 13rem);
+  }
+  .lightbox-actions .btn {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .cert-image:hover .cert-image-clip img,
+  .cert-image:focus-visible .cert-image-clip img {
+    scale: 1;
+  }
+  .cert-image-hint {
+    translate: 0 0;
+  }
+  .lightbox-close:hover {
+    rotate: 0deg;
+  }
+}

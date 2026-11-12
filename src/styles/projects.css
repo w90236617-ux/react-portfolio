@@ -1,0 +1,507 @@
+/* =========================================================
+   PROJECTS (Projects.jsx + ProjectCard.jsx ke exact classNames)
+   Rules:
+   - .project-item par CSS transform/opacity NAHI (GSAP entrance)
+   - .project-tilt / .project-card par transform NAHI (TiltCard)
+   - .project-tilt / .project-card par backdrop-filter, overflow,
+     isolation NAHI (ye 3D depth flat kar dete hain)
+   - .filter-btn hover mein transform NAHI (magnetic)
+   - .projects-cta par AOS hai, isliye hover pseudo par
+   ========================================================= */
+
+/* ---------- Section ---------- */
+.projects {
+  position: relative;
+  isolation: isolate;
+  padding-block: calc(var(--header-h) + 2rem) var(--section-y);
+  padding-inline: max(
+    var(--gutter),
+    calc((100% - var(--container)) / 2 + var(--gutter))
+  );
+  overflow-x: clip; /* cards x:±120 se aate hain, horizontal scroll na aaye */
+}
+
+/* Title ke peeche soft glow */
+.projects::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 50%;
+  width: min(90vw, 760px);
+  aspect-ratio: 1.6;
+  translate: -50% -10%;
+  border-radius: 50%;
+  background: var(--grad-glow);
+  filter: blur(60px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+.projects-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: clamp(2.5rem, 6vw, 4rem);
+}
+
+.projects-title {
+  margin: 0 0 0.3em;
+  font-size: clamp(2.6rem, 6.2vw, 4.4rem);
+  line-height: 1.12; /* split-mask overflow hidden hai */
+  letter-spacing: -0.035em;
+}
+.projects-title::after {
+  content: "";
+  display: block;
+  width: 72px;
+  height: 3px;
+  margin: 0.5rem auto 0;
+  border-radius: 3px;
+  background: var(--grad-accent);
+}
+
+/* .accent + SplitText fix: gradient har char par */
+.projects-title .accent {
+  background: none;
+  -webkit-background-clip: border-box;
+  background-clip: border-box;
+  -webkit-text-fill-color: currentColor;
+  color: var(--accent);
+}
+.projects-title .accent .split-inner {
+  background: linear-gradient(
+    165deg,
+    var(--accent-2) 0%,
+    var(--accent) 55%,
+    var(--accent-deep) 125%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+.projects-subtitle {
+  max-width: 52ch;
+  margin: 0.75rem auto 2rem;
+  font-size: clamp(1rem, 1.5vw, 1.1rem);
+}
+
+/* ---------- Filter bar ---------- */
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.4rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--inset-hl);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.filter-btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden; /* sirf button par, ::before ke liye */
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.7rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  transition:
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+
+/* Active gradient: opacity se smooth fade (gradient transition nahi hota) */
+.filter-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--btn-primary-bg);
+  opacity: 0;
+  transition: opacity 0.4s var(--ease);
+}
+
+.filter-btn:hover {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.filter-btn.active {
+  color: var(--btn-primary-text);
+  border-color: rgba(180, 196, 218, 0.25);
+  box-shadow: var(--shadow-glow), var(--inset-hl);
+}
+.filter-btn.active::before {
+  opacity: 1;
+}
+
+.filter-count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.5rem;
+  height: 1.5rem;
+  padding: 0 0.4rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: inherit;
+  background: var(--border);
+  border-radius: var(--radius-pill);
+  transition: background 0.35s var(--ease);
+}
+.filter-btn.active .filter-count {
+  background: rgba(255, 255, 255, 0.18);
+}
+
+/* =========================================================
+   GRID
+   ========================================================= */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch; /* sab cards barabar height */
+  gap: clamp(1.25rem, 2.6vw, 2rem);
+}
+
+/* GSAP entrance wala wrapper: sirf layout */
+.project-item {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+.project-item:hover {
+  z-index: 2; /* tilt/scale par card padosi ke upar rahe */
+}
+
+/* TiltCard root */
+.project-tilt {
+  flex: 1;
+  display: flex;
+  min-width: 0;
+  border-radius: var(--radius); /* glare ke corners round */
+}
+
+/* =========================================================
+   CARD (<a>)
+   ========================================================= */
+/* Specificity thori zyada: index.css ka card base override ho */
+.projects-grid .project-card {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  color: inherit;
+  cursor: pointer;
+  transform-style: preserve-3d; /* data-tilt-z ka depth pass ho */
+  backdrop-filter: none; /* 3D flat na ho */
+  -webkit-backdrop-filter: none;
+}
+
+.projects-grid .project-card:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 4px;
+}
+
+/* Upar patli highlight line */
+.project-card::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  top: 0;
+  left: 14%;
+  right: 14%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-2), transparent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* Corner glow, hover par barhta hai */
+.project-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(110% 70% at 0% 0%, var(--glow), transparent 60%);
+  opacity: 0.25;
+  transition: opacity 0.5s var(--ease);
+  pointer-events: none;
+}
+.project-card:hover::after,
+.project-card:focus-visible::after {
+  opacity: 0.75;
+}
+
+/* ---------- Image ---------- */
+.project-image {
+  position: relative;
+  z-index: 1;
+  isolation: isolate; /* leaf hai, yahan theek hai (Safari radius+zoom fix) */
+  overflow: hidden; /* zoom image ke andar rahe */
+  aspect-ratio: 16 / 10;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 6px);
+  background: var(--bg-elev);
+}
+
+.project-image img {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease); /* img GSAP se nahi chalti */
+}
+.project-card:hover .project-image img {
+  transform: scale(1.08);
+}
+
+/* Image na ho to placeholder */
+.project-placeholder {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background:
+    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 26px 26px,
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 26px 26px,
+    radial-gradient(80% 90% at 20% 0%, var(--glow), transparent 70%),
+    linear-gradient(145deg, var(--bg-elev), var(--bg-soft));
+}
+
+/* Hover overlay: "View Live" */
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  background:
+    radial-gradient(70% 70% at 50% 100%, rgba(62, 90, 130, 0.45), transparent 70%),
+    rgba(5, 7, 10, 0.55);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+}
+.project-card:hover .project-overlay,
+.project-card:focus-visible .project-overlay {
+  opacity: 1;
+}
+
+.project-overlay-text {
+  padding: 0.65rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #f4f7fb; /* overlay hamesha dark, text hamesha white */
+  background: rgba(14, 19, 27, 0.72);
+  border: 1px solid rgba(180, 196, 218, 0.4);
+  border-radius: var(--radius-pill);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateY(14px);
+  transition: transform 0.5s var(--ease);
+}
+.project-card:hover .project-overlay-text,
+.project-card:focus-visible .project-overlay-text {
+  transform: translateY(0);
+}
+
+/* ---------- Body ---------- */
+.project-body {
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.25rem 0.9rem 0.9rem;
+}
+
+/* Bada outline number (top-right) */
+.project-number {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  font-family: var(--font-heading);
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-strong);
+  transition: -webkit-text-stroke-color 0.4s var(--ease);
+  user-select: none;
+}
+.project-card:hover .project-number {
+  -webkit-text-stroke-color: var(--accent);
+}
+
+.project-title {
+  margin: 0;
+  padding-right: 3.5rem; /* number se na takraye */
+  font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+  line-height: 1.25;
+}
+
+.project-desc {
+  flex: 1; /* tech tags hamesha neeche */
+  margin: 0;
+  font-size: 0.93rem;
+  line-height: 1.7;
+}
+
+/* ---------- Tech tags ---------- */
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.tech-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
+  color: var(--accent-2);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  transition:
+    border-color 0.35s var(--ease),
+    color 0.35s var(--ease);
+}
+.project-card:hover .tech-tag {
+  border-color: var(--border-strong);
+}
+[data-theme="light"] .tech-tag {
+  color: var(--accent);
+}
+
+/* =========================================================
+   CTA (AOS fade-up)
+   ========================================================= */
+.projects-cta {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  margin-top: clamp(3.5rem, 8vw, 6rem);
+  padding: clamp(2rem, 5vw, 3.5rem) var(--gutter);
+  text-align: center;
+  background: var(--grad-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card), var(--inset-hl);
+}
+
+.projects-cta::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(60% 90% at 50% 120%, var(--glow), transparent 70%);
+  opacity: 0.5;
+  transition: opacity 0.6s var(--ease);
+  pointer-events: none;
+}
+.projects-cta:hover::before {
+  opacity: 0.95;
+}
+
+.projects-cta p {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.3rem, 3vw, 1.9rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+/* =========================================================
+   TOUCH: hover nahi hota, overlay band, poora card tap hota hai
+   ========================================================= */
+@media (hover: none) {
+  .project-overlay {
+    display: none;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 1023px) {
+  .projects-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 639px) {
+  .projects {
+    padding-top: calc(var(--header-h) + 1.25rem);
+  }
+
+  .projects-grid {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 520px;
+    margin-inline: auto;
+  }
+
+  /* Filter buttons: ek ke neeche ek, full width */
+  .filter-bar {
+    width: 100%;
+    flex-direction: column;
+    border-radius: var(--radius);
+  }
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+    white-space: normal;
+  }
+
+  .project-number {
+    font-size: 2.2rem;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .project-card:hover .project-image img {
+    transform: none;
+  }
+  .project-overlay-text {
+    transform: none;
+  }
+}

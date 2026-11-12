@@ -1,0 +1,553 @@
+/* =========================================================
+   1. DESIGN TOKENS: DARK (main theme)
+   Palette photo se: black shirt + cool blue-gray background
+   ========================================================= */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Base colors */
+  --bg: #05070a;
+  --bg-soft: #0a0e14;
+  --bg-elev: #111720;
+  --surface: rgba(20, 27, 38, 0.55);
+  --surface-hover: rgba(30, 41, 57, 0.72);
+  --border: rgba(160, 182, 212, 0.14);
+  --border-strong: rgba(160, 182, 212, 0.3);
+
+  --text: #eef2f8;
+  --text-muted: #9aa8bc;
+
+  /* Brand */
+  --accent: #6f8fb8;        /* steel blue */
+  --accent-2: #b4c4da;      /* cool blue-gray (photo bg) */
+  --accent-deep: #3e5a82;   /* deep steel */
+  --glow: rgba(111, 143, 184, 0.3);
+  --glare: rgba(180, 196, 218, 0.22);
+
+  /* Gradient system */
+  --grad-primary: linear-gradient(135deg, #05070a 0%, #11161e 100%);
+  --grad-accent: linear-gradient(135deg, #1b2431 0%, #35507a 55%, #6f8fb8 100%);
+  --grad-text: linear-gradient(120deg, #eef2f8 0%, #b4c4da 45%, #6f8fb8 100%);
+  --grad-card: linear-gradient(
+    145deg,
+    rgba(32, 43, 60, 0.62) 0%,
+    rgba(14, 19, 27, 0.78) 100%
+  );
+  --grad-glow: radial-gradient(circle, rgba(111, 143, 184, 0.35), transparent 70%);
+  --grad-ring: conic-gradient(
+    from 140deg,
+    #b4c4da,
+    #3e5a82,
+    #11161e,
+    #6f8fb8,
+    #b4c4da
+  );
+
+  /* Page background (layered) */
+  --page-bg:
+    radial-gradient(60% 50% at 82% 0%, rgba(111, 143, 184, 0.2), transparent 70%),
+    radial-gradient(50% 45% at 0% 45%, rgba(62, 90, 130, 0.16), transparent 70%),
+    radial-gradient(45% 40% at 100% 100%, rgba(180, 196, 218, 0.07), transparent 70%),
+    linear-gradient(180deg, #05070a 0%, #0a0e14 50%, #05070a 100%);
+  --grid-line: rgba(160, 182, 212, 0.05);
+
+  /* Shadows */
+  --shadow-card: 0 24px 60px -24px rgba(0, 0, 0, 0.85);
+  --shadow-glow: 0 12px 40px -12px var(--glow);
+  --inset-hl: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+  /* Buttons */
+  --btn-primary-bg: linear-gradient(135deg, #1b2431 0%, #35507a 55%, #6f8fb8 100%);
+  --btn-primary-text: #f4f7fb;
+  --header-bg: rgba(8, 11, 16, 0.6);
+}
+
+/* =========================================================
+   2. DESIGN TOKENS: LIGHT
+   White + cool gray + soft blue-gray, same identity
+   ========================================================= */
+[data-theme="light"] {
+  color-scheme: light;
+
+  --bg: #eef2f7;
+  --bg-soft: #e4eaf2;
+  --bg-elev: #ffffff;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-hover: rgba(255, 255, 255, 0.95);
+  --border: rgba(51, 72, 102, 0.14);
+  --border-strong: rgba(51, 72, 102, 0.3);
+
+  --text: #0f1722;
+  --text-muted: #4d5b70;
+
+  --accent: #3f5f8a;
+  --accent-2: #6f8fb8;
+  --accent-deep: #2a3a52;
+  --glow: rgba(63, 95, 138, 0.25);
+  --glare: rgba(255, 255, 255, 0.65);
+
+  --grad-primary: linear-gradient(135deg, #ffffff 0%, #e4eaf2 100%);
+  --grad-accent: linear-gradient(135deg, #2a3a52 0%, #3f5f8a 60%, #6f8fb8 100%);
+  --grad-text: linear-gradient(120deg, #0f1722 0%, #2a3a52 40%, #3f5f8a 100%);
+  --grad-card: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.92) 0%,
+    rgba(228, 234, 242, 0.7) 100%
+  );
+  --grad-glow: radial-gradient(circle, rgba(63, 95, 138, 0.22), transparent 70%);
+  --grad-ring: conic-gradient(
+    from 140deg,
+    #ffffff,
+    #6f8fb8,
+    #2a3a52,
+    #b4c4da,
+    #ffffff
+  );
+
+  --page-bg:
+    radial-gradient(60% 50% at 82% 0%, rgba(111, 143, 184, 0.22), transparent 70%),
+    radial-gradient(50% 45% at 0% 45%, rgba(180, 196, 218, 0.35), transparent 70%),
+    radial-gradient(45% 40% at 100% 100%, rgba(255, 255, 255, 0.8), transparent 70%),
+    linear-gradient(180deg, #ffffff 0%, #eef2f7 50%, #e1e8f1 100%);
+  --grid-line: rgba(51, 72, 102, 0.06);
+
+  --shadow-card: 0 20px 45px -22px rgba(42, 58, 82, 0.28);
+  --shadow-glow: 0 12px 36px -12px var(--glow);
+  --inset-hl: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+
+  --btn-primary-bg: linear-gradient(135deg, #2a3a52 0%, #3f5f8a 60%, #6f8fb8 100%);
+  --btn-primary-text: #ffffff;
+  --header-bg: rgba(255, 255, 255, 0.65);
+}
+
+/* =========================================================
+   3. SHARED TOKENS (theme-independent)
+   ========================================================= */
+:root {
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Space Grotesk", "Inter", system-ui, sans-serif;
+
+  --container: 1200px;
+  --header-h: 72px;
+  --section-y: clamp(4rem, 8vw, 7rem);
+  --gutter: clamp(1rem, 4vw, 2rem);
+
+  --radius-sm: 10px;
+  --radius: 18px;
+  --radius-pill: 999px;
+
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* =========================================================
+   4. RESET AND BASE
+   ========================================================= */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* slide animations se horizontal scroll na aaye */
+}
+
+#root {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-main {
+  flex: 1;
+}
+
+img,
+video,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  background: none;
+  border: 0;
+}
+
+::selection {
+  background: var(--accent);
+  color: #fff;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--accent-deep);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
+
+/* =========================================================
+   5. PAGE BACKGROUND
+   body::before = layered gradients (slow drift)
+   body::after  = faint grid, centre mein visible
+   Dono fixed aur pointer-events none
+   ========================================================= */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -10%;
+  z-index: -2;
+  background: var(--page-bg);
+  pointer-events: none;
+  will-change: transform;
+  animation: bg-drift 26s ease-in-out infinite alternate;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
+}
+
+@keyframes bg-drift {
+  from { transform: translate3d(-1.5%, 1%, 0) scale(1); }
+  to   { transform: translate3d(1.5%, -1%, 0) scale(1.06); }
+}
+
+/* =========================================================
+   6. THEME SWITCH TRANSITION
+   Sirf color properties, transform NAHI (GSAP safe)
+   ========================================================= */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition:
+    background-color 0.5s ease,
+    border-color 0.5s ease,
+    color 0.5s ease,
+    fill 0.5s ease,
+    stroke 0.5s ease,
+    box-shadow 0.5s ease !important;
+}
+
+/* =========================================================
+   7. TYPOGRAPHY
+   ========================================================= */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-heading);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5em;
+  color: var(--text);
+}
+
+h1 { font-size: clamp(2.5rem, 7vw, 5rem); }
+h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); }
+h3 { font-size: clamp(1.2rem, 2vw, 1.5rem); }
+
+p {
+  margin: 0 0 1em;
+  color: var(--text-muted);
+}
+
+/* Gradient highlight text (steel blue) */
+.accent {
+  background: var(--grad-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* =========================================================
+   8. LAYOUT HELPERS
+   ========================================================= */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+section {
+  padding-block: var(--section-y);
+  scroll-margin-top: var(--header-h);
+  background: transparent; /* page background nazar aaye */
+}
+
+/* =========================================================
+   9. BUTTONS
+   Hover mein transform NAHI, kyunke GSAP magnetic use karta hai
+   ========================================================= */
+.btn-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.btn {
+  position: relative;
+  overflow: hidden; /* sirf button par, sheen ke liye */
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 0.95rem;
+  line-height: 1;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background 0.35s var(--ease),
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease),
+    filter 0.35s var(--ease);
+}
+
+/* Light sheen sweep (pseudo par transform, button par nahi) */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease);
+}
+.btn:hover::before {
+  transform: translateX(120%);
+}
+
+.btn-primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border-color: rgba(180, 196, 218, 0.25);
+  box-shadow: var(--shadow-glow), var(--inset-hl);
+}
+.btn-primary:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 16px 48px -10px var(--glow), var(--inset-hl);
+}
+
+.btn-outline {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border-strong);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.btn-outline:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--glow);
+}
+
+/* =========================================================
+   10. CARD BASE
+   Cards par overflow:hidden mat lagana (3D depth kat jati hai)
+   ========================================================= */
+.skill-card,
+.project-card,
+.info-card,
+.cert-card,
+.cv-card {
+  background: var(--grad-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card), var(--inset-hl);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition:
+    border-color 0.4s var(--ease),
+    background 0.4s var(--ease),
+    box-shadow 0.4s var(--ease);
+}
+
+.skill-card:hover,
+.project-card:hover,
+.info-card:hover,
+.cert-card:hover,
+.cv-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-card), var(--shadow-glow), var(--inset-hl);
+}
+
+/* Certificates grid (minimum, baqi certificates.css mein) */
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+.cert-card {
+  padding: 14px;
+}
+
+/* =========================================================
+   11. SPLITTEXT
+   ========================================================= */
+.split-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: top;
+  padding-bottom: 0.12em;
+}
+.split-inner {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* =========================================================
+   12. TILTCARD
+   ========================================================= */
+.tilt-card {
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.tilt-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--glare-x, 50%) var(--glare-y, 50%),
+    var(--glare),
+    transparent 60%
+  );
+}
+
+/* =========================================================
+   13. THEME TOGGLE (button)
+   Hover mein transform nahi, sirf andar ka icon ghoomta hai
+   ========================================================= */
+.theme-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+.theme-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--glow);
+}
+.theme-toggle-icon {
+  display: grid;
+  place-items: center;
+  transition: transform 0.6s var(--ease);
+}
+.theme-toggle:hover .theme-toggle-icon {
+  transform: rotate(35deg);
+}
+
+/* =========================================================
+   14. RESPONSIVE
+   ========================================================= */
+@media (max-width: 768px) {
+  body::before {
+    animation: none; /* mobile par performance */
+  }
+  body::after {
+    background-size: 44px 44px;
+  }
+}
+
+/* =========================================================
+   15. REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  body::before {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

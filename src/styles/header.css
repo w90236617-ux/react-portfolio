@@ -1,0 +1,493 @@
+/* =========================================================
+   HEADER (Header.jsx ke exact classNames)
+   Rules:
+   - .site-header par CSS transform NAHI (GSAP yPercent hide/show)
+   - .site-header par bada box-shadow NAHI (hide hone par jhalakta hai)
+   - .nav-list / .nav-item static rahein: indicator offsetLeft
+     .header-nav se naapta hai
+   - .logo / .header-cta hover mein transform NAHI (magnetic)
+   - .header-brand / .nav-item / .header-actions / .mobile-item /
+     .mobile-footer par transform/opacity NAHI (GSAP entrance)
+   ========================================================= */
+
+.site-header {
+  /* Theme ke hisaab se local tokens */
+  --nav-bg: rgba(255, 255, 255, 0.04);
+  --ind-bg: linear-gradient(
+    145deg,
+    rgba(111, 143, 184, 0.32),
+    rgba(62, 90, 130, 0.2)
+  );
+  --ind-border: rgba(180, 196, 218, 0.28);
+  --ind-shadow: 0 8px 22px -10px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  height: var(--header-h);
+  background: transparent;
+  border-bottom: 1px solid transparent;
+  will-change: transform;
+  transition:
+    background-color 0.45s var(--ease),
+    border-color 0.45s var(--ease),
+    backdrop-filter 0.45s var(--ease);
+}
+
+[data-theme="light"] .site-header {
+  --nav-bg: rgba(42, 58, 82, 0.06);
+  --ind-bg: linear-gradient(
+    145deg,
+    rgba(255, 255, 255, 0.98),
+    rgba(228, 234, 242, 0.9)
+  );
+  --ind-border: rgba(51, 72, 102, 0.22);
+  --ind-shadow: 0 8px 20px -10px rgba(42, 58, 82, 0.45), inset 0 1px 0 #fff;
+}
+
+/* Scroll ke baad: glass */
+.site-header.is-scrolled {
+  background: var(--header-bg);
+  border-bottom-color: var(--border);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Neeche patli gradient line (shadow ki jagah) */
+.site-header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+  opacity: 0;
+  transition: opacity 0.45s var(--ease);
+  pointer-events: none;
+}
+.site-header.is-scrolled::after {
+  opacity: 1;
+}
+
+/* Scroll progress bar (GSAP scaleX chalata hai) */
+.scroll-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--accent-2));
+  transform-origin: 0 50%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ---------- Layout: brand | nav (center) | actions ---------- */
+.header-inner {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  height: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ---------- Logo ---------- */
+.header-brand {
+  justify-self: start;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--text);
+}
+
+.logo-mark {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #f4f7fb;
+  background: var(--grad-accent);
+  border: 1px solid rgba(180, 196, 218, 0.3);
+  border-radius: 12px;
+  box-shadow: var(--shadow-glow), inset 0 1px 0 rgba(255, 255, 255, 0.14);
+  transition:
+    box-shadow 0.4s var(--ease),
+    border-color 0.4s var(--ease);
+}
+.logo:hover .logo-mark {
+  border-color: rgba(180, 196, 218, 0.6);
+  box-shadow: 0 12px 34px -8px var(--glow), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.logo-text {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
+}
+
+/* ---------- Desktop nav ---------- */
+.header-nav {
+  position: relative; /* indicator ka offsetParent */
+  isolation: isolate; /* indicator z-index:-1 nav ke andar rahe */
+  justify-self: center;
+  padding: 4px;
+  background: var(--nav-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--inset-hl);
+}
+
+.nav-list {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  /* position static: offsetLeft ke liye zaroori */
+}
+
+.nav-item {
+  /* position static rakhna: offsetLeft ke liye zaroori */
+  display: block;
+}
+
+.nav-link {
+  display: block;
+  padding: 0.55rem 1.05rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  transition: color 0.3s var(--ease);
+}
+.nav-link:hover,
+.nav-link.active {
+  color: var(--text);
+}
+
+/* Sliding pill (GSAP: x, width, opacity) */
+.nav-indicator {
+  position: absolute;
+  z-index: -1;
+  top: 4px;
+  bottom: 4px;
+  left: 0;
+  width: 0;
+  opacity: 0; /* GSAP position set karte hi 1 kar deta hai */
+  background: var(--ind-bg);
+  border: 1px solid var(--ind-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--ind-shadow);
+  pointer-events: none;
+  will-change: transform, width;
+}
+
+/* ---------- Right side actions ---------- */
+.header-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Hire Me */
+.header-cta {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden; /* sirf button par, sheen ke liye */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.62rem 1.3rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: nowrap;
+  color: var(--btn-primary-text);
+  background: var(--btn-primary-bg);
+  border: 1px solid rgba(180, 196, 218, 0.25);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-glow), var(--inset-hl);
+  transition:
+    box-shadow 0.35s var(--ease),
+    filter 0.35s var(--ease);
+}
+.header-cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(
+    110deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.28) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s var(--ease);
+}
+.header-cta:hover {
+  filter: brightness(1.12);
+  box-shadow: 0 14px 40px -10px var(--glow), var(--inset-hl);
+}
+.header-cta:hover::before {
+  transform: translateX(120%);
+}
+
+/* ---------- Hamburger ---------- */
+.menu-toggle {
+  display: none; /* desktop par band */
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  transition:
+    background 0.35s var(--ease),
+    border-color 0.35s var(--ease),
+    box-shadow 0.35s var(--ease);
+}
+.menu-toggle:hover {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px var(--glow);
+}
+
+.menu-toggle-lines {
+  position: relative;
+  display: block;
+  width: 18px;
+  height: 14px;
+}
+.menu-toggle-lines span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  transition:
+    top 0.4s var(--ease),
+    transform 0.4s var(--ease),
+    opacity 0.25s var(--ease);
+}
+.menu-toggle-lines span:nth-child(1) { top: 0; }
+.menu-toggle-lines span:nth-child(2) { top: 6px; }
+.menu-toggle-lines span:nth-child(3) { top: 12px; }
+
+.menu-toggle.is-open .menu-toggle-lines span:nth-child(1) {
+  top: 6px;
+  transform: rotate(45deg);
+}
+.menu-toggle.is-open .menu-toggle-lines span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0.2);
+}
+.menu-toggle.is-open .menu-toggle-lines span:nth-child(3) {
+  top: 6px;
+  transform: rotate(-45deg);
+}
+
+/* Menu khula ho to header transparent (menu ke upar saaf dikhe) */
+body:has(.mobile-menu.is-open) .site-header {
+  background: transparent;
+  border-bottom-color: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+/* =========================================================
+   MOBILE MENU (header ke bahar, circle reveal)
+   ========================================================= */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 99; /* header (100) ke neeche, toggle upar rahe */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: calc(var(--header-h) + 1.5rem) var(--gutter) 2rem;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--page-bg);
+  visibility: hidden;
+  pointer-events: none;
+  /* Toggle button ki jagah se circle khulta hai */
+  clip-path: circle(
+    0% at calc(100% - var(--gutter) - 20px) calc(var(--header-h) / 2)
+  );
+  transition:
+    clip-path 0.8s var(--ease),
+    visibility 0s linear 0.8s;
+}
+.mobile-menu.is-open {
+  visibility: visible;
+  pointer-events: auto;
+  clip-path: circle(
+    150vmax at calc(100% - var(--gutter) - 20px) calc(var(--header-h) / 2)
+  );
+  transition:
+    clip-path 0.9s var(--ease),
+    visibility 0s;
+}
+
+/* Menu ke peeche halka grid */
+.mobile-menu::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 80%);
+  mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 20%, transparent 80%);
+}
+
+.mobile-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+}
+
+.mobile-link {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.7rem 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 9vw, 3.1rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  transition:
+    color 0.35s var(--ease),
+    border-color 0.35s var(--ease);
+}
+.mobile-link small {
+  min-width: 2ch;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--accent);
+}
+.mobile-link::after {
+  content: "→";
+  margin-left: auto;
+  font-size: 1.4rem;
+  color: var(--accent-2);
+  opacity: 0;
+  transform: translateX(-10px);
+  transition:
+    opacity 0.35s var(--ease),
+    transform 0.45s var(--ease);
+}
+.mobile-link:hover,
+.mobile-link.active {
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+.mobile-link:hover::after,
+.mobile-link.active::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.mobile-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  padding-top: 1.5rem;
+  font-size: 0.95rem;
+  border-top: 1px solid var(--border);
+}
+.mobile-footer a {
+  width: fit-content;
+  color: var(--text-muted);
+  transition: color 0.3s var(--ease);
+}
+.mobile-footer a:hover {
+  color: var(--text);
+}
+
+/* =========================================================
+   RESPONSIVE (JS ka breakpoint: 900px)
+   ========================================================= */
+@media (max-width: 899px) {
+  :root {
+    --header-h: 64px; /* pages ka padding-top bhi khud adjust */
+  }
+
+  .header-inner {
+    grid-template-columns: 1fr auto;
+  }
+  .header-nav {
+    display: none;
+  }
+  .menu-toggle {
+    display: inline-grid;
+  }
+}
+
+@media (min-width: 900px) {
+  .mobile-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-cta {
+    display: none; /* menu ke andar Contact hai */
+  }
+}
+
+@media (max-width: 360px) {
+  .logo-text {
+    display: none;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  .mobile-menu,
+  .mobile-menu.is-open {
+    transition-delay: 0s;
+  }
+  .mobile-link::after {
+    transform: none;
+  }
+  .header-cta::before {
+    display: none;
+  }
+}
