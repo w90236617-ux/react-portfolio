@@ -1,5 +1,5 @@
 import Footer from "./components/Footer";
-import Header from "./components/Header";
+import Header from "./component/Header";
 import ScrollToTop from "./components/ScrollToTop";
 import Navigation from "./config/Navigation";
 
